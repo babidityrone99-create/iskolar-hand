@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { CheckCircle, Shield, Star, Users, Clock, Verified } from "lucide-react";
+import { CheckCircle, Shield, Star, Users, Clock, Verified, Smartphone } from "lucide-react";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -97,12 +97,13 @@ const Landing = () => {
               Start Helping Today
             </Button>
             <Button 
-              onClick={() => navigate("/errands")} 
+              onClick={() => navigate("/install")} 
               variant="outline" 
               size="lg"
-              className="border-primary/30 hover:bg-primary/5"
+              className="border-primary/30 hover:bg-primary/5 gap-2"
             >
-              Browse Errands
+              <Smartphone className="h-5 w-5" />
+              Install App
             </Button>
           </div>
         </div>
