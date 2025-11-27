@@ -13,6 +13,7 @@ const Errands = () => {
   const { toast } = useToast();
   const [user, setUser] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [acceptedErrands, setAcceptedErrands] = useState<number[]>([]);
 
   useEffect(() => {
     // Check authentication
@@ -44,6 +45,14 @@ const Errands = () => {
       description: "You have been successfully signed out.",
     });
     navigate("/");
+  };
+
+  const handleAcceptErrand = (errandId: number, errandTitle: string) => {
+    setAcceptedErrands([...acceptedErrands, errandId]);
+    toast({
+      title: "Errand Accepted!",
+      description: `You've accepted: ${errandTitle}`,
+    });
   };
 
   // Sample errands data (will be replaced with real database data)
@@ -164,8 +173,13 @@ const Errands = () => {
                 </div>
                 <div className="flex flex-col items-end gap-2 md:text-right">
                   <div className="text-2xl font-bold text-primary">{errand.budget}</div>
-                  <Button size="sm" className="bg-accent hover:bg-accent-light">
-                    Accept Errand
+                  <Button 
+                    size="sm" 
+                    className="bg-accent hover:bg-accent-light"
+                    onClick={() => handleAcceptErrand(errand.id, errand.title)}
+                    disabled={acceptedErrands.includes(errand.id)}
+                  >
+                    {acceptedErrands.includes(errand.id) ? "Accepted ✓" : "Accept Errand"}
                   </Button>
                 </div>
               </div>
