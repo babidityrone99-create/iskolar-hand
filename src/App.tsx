@@ -8,6 +8,7 @@ import Auth from "./pages/Auth";
 import Errands from "./pages/Errands";
 import PostErrand from "./pages/PostErrand";
 import Profile from "./pages/Profile";
+import Install from "./pages/Install";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/errands" element={<Errands />} />
           <Route path="/post-errand" element={<PostErrand />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/install" element={<Install />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
