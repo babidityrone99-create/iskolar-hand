@@ -35,7 +35,45 @@ const PostErrand = () => {
     setIsLoading(true);
 
     try {
-      // This will be replaced with actual database insert
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        throw new Error("You must be logged in to post an errand");
+      }
+
+      // Ensure user has a profile
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('user_id')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (!profile) {
+        // Create profile if it doesn't exist
+        const { error: createProfileError } = await supabase
+          .from('profiles')
+          .insert({
+            user_id: user.id,
+            display_name: user.email?.split('@')[0] || 'Anonymous'
+          });
+
+        if (createProfileError) throw createProfileError;
+      }
+
+      // Insert the errand
+      const { error: insertError } = await supabase
+        .from('errands')
+        .insert({
+          user_id: user.id,
+          title,
+          description,
+          location,
+          budget: parseFloat(budget),
+          category,
+          status: 'available'
+        });
+
+      if (insertError) throw insertError;
+
       toast({
         title: "Errand posted!",
         description: "Your errand has been posted successfully.",
