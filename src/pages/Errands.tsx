@@ -13,7 +13,8 @@ const Errands = () => {
   const { toast } = useToast();
   const [user, setUser] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [acceptedErrands, setAcceptedErrands] = useState<number[]>([]);
+  const [acceptedErrands, setAcceptedErrands] = useState<string[]>([]);
+  const [errands, setErrands] = useState<any[]>([]);
 
   useEffect(() => {
     // Check authentication
@@ -38,6 +39,33 @@ const Errands = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
+  useEffect(() => {
+    // Fetch errands from database
+    const fetchErrands = async () => {
+      const { data, error } = await supabase
+        .from('errands')
+        .select(`
+          *,
+          profiles (display_name)
+        `)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        toast({
+          title: "Error",
+          description: "Failed to load errands",
+          variant: "destructive",
+        });
+      } else {
+        setErrands(data || []);
+      }
+    };
+
+    if (user) {
+      fetchErrands();
+    }
+  }, [user, toast]);
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     toast({
@@ -47,7 +75,7 @@ const Errands = () => {
     navigate("/");
   };
 
-  const handleAcceptErrand = (errandId: number, errandTitle: string) => {
+  const handleAcceptErrand = (errandId: string, errandTitle: string) => {
     setAcceptedErrands([...acceptedErrands, errandId]);
     toast({
       title: "Errand Accepted!",
@@ -55,39 +83,19 @@ const Errands = () => {
     });
   };
 
-  // Sample errands data (will be replaced with real database data)
-  const sampleErrands = [
-    {
-      id: 1,
-      title: "Pick up documents from Registrar",
-      description: "Need someone to get my transcript of records. Will pay ₱100.",
-      location: "Main Building",
-      timePosted: "2 hours ago",
-      budget: "₱100",
-      category: "Documents",
-      poster: "Maria Santos"
-    },
-    {
-      id: 2,
-      title: "Food delivery from Freedom Wall area",
-      description: "Please deliver food from area near Freedom Wall to my dorm. Thanks!",
-      location: "Freedom Wall to Molave",
-      timePosted: "5 hours ago",
-      budget: "₱80",
-      category: "Delivery",
-      poster: "Juan Cruz"
-    },
-    {
-      id: 3,
-      title: "Buy textbook from University Bookstore",
-      description: "Looking for someone to buy a specific textbook. Will reimburse cost + ₱150 service fee.",
-      location: "UPLB Bookstore",
-      timePosted: "1 day ago",
-      budget: "₱150",
-      category: "Shopping",
-      poster: "Ana Reyes"
-    }
-  ];
+  const getTimeAgo = (timestamp: string) => {
+    const now = new Date();
+    const posted = new Date(timestamp);
+    const diffMs = now.getTime() - posted.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffDays > 0) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    if (diffHours > 0) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    if (diffMins > 0) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+    return 'Just now';
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -147,7 +155,7 @@ const Errands = () => {
         {/* Errands Feed */}
         <div className="space-y-4">
           <h2 className="text-2xl font-bold mb-4">Available Errands</h2>
-          {sampleErrands.map((errand) => (
+          {errands.map((errand) => (
             <Card key={errand.id} className="p-6 hover:shadow-lg transition-all cursor-pointer">
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                 <div className="flex-1">
@@ -158,7 +166,7 @@ const Errands = () => {
                     <div className="flex-1">
                       <h3 className="font-semibold text-lg mb-1">{errand.title}</h3>
                       <p className="text-sm text-muted-foreground mb-2">
-                        Posted by {errand.poster} • {errand.timePosted}
+                        Posted by {errand.profiles?.display_name || 'Anonymous'} • {getTimeAgo(errand.created_at)}
                       </p>
                     </div>
                   </div>
@@ -172,7 +180,7 @@ const Errands = () => {
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-2 md:text-right">
-                  <div className="text-2xl font-bold text-primary">{errand.budget}</div>
+                  <div className="text-2xl font-bold text-primary">₱{errand.budget}</div>
                   <Button 
                     size="sm" 
                     className="bg-accent hover:bg-accent-light"
@@ -187,7 +195,7 @@ const Errands = () => {
           ))}
         </div>
 
-        {sampleErrands.length === 0 && (
+        {errands.length === 0 && (
           <Card className="p-12 text-center">
             <p className="text-muted-foreground mb-4">No errands available at the moment</p>
             <Button onClick={() => navigate("/post-errand")} className="bg-primary hover:bg-primary-light">
