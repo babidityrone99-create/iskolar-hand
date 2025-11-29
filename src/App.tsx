@@ -9,6 +9,7 @@ import Errands from "./pages/Errands";
 import PostErrand from "./pages/PostErrand";
 import Profile from "./pages/Profile";
 import Install from "./pages/Install";
+import Chat from "./pages/Chat";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,9 +23,10 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/errands" element={<Errands />} />
-          <Route path="/post-errand" element={<PostErrand />} />
-          <Route path="/profile" element={<Profile />} />
+        <Route path="/errands" element={<Errands />} />
+        <Route path="/post-errand" element={<PostErrand />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/chat/:conversationId" element={<Chat />} />
           <Route path="/install" element={<Install />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

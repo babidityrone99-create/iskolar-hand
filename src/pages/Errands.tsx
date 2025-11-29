@@ -75,12 +75,84 @@ const Errands = () => {
     navigate("/");
   };
 
-  const handleAcceptErrand = (errandId: string, errandTitle: string) => {
-    setAcceptedErrands([...acceptedErrands, errandId]);
-    toast({
-      title: "Errand Accepted!",
-      description: `You've accepted: ${errandTitle}`,
-    });
+  const handleAcceptErrand = async (errand: any) => {
+    if (!user) return;
+
+    try {
+      // Ensure user has a profile
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('user_id, display_name')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (!profile) {
+        // Create profile if it doesn't exist
+        const { error: createProfileError } = await supabase
+          .from('profiles')
+          .insert({
+            user_id: user.id,
+            display_name: user.email?.split('@')[0] || 'Anonymous'
+          });
+
+        if (createProfileError) throw createProfileError;
+      }
+
+      // Check if conversation already exists
+      const { data: existingConversation } = await supabase
+        .from('conversations')
+        .select('id')
+        .eq('errand_id', errand.id)
+        .eq('helper_id', user.id)
+        .maybeSingle();
+
+      if (existingConversation) {
+        // Navigate to existing conversation
+        navigate(`/chat/${existingConversation.id}`);
+        return;
+      }
+
+      // Create new conversation
+      const { data: newConversation, error: conversationError } = await supabase
+        .from('conversations')
+        .insert({
+          errand_id: errand.id,
+          poster_id: errand.user_id,
+          helper_id: user.id
+        })
+        .select()
+        .single();
+
+      if (conversationError) throw conversationError;
+
+      // Send introduction message
+      const helperName = profile?.display_name || user.email?.split('@')[0] || 'Anonymous';
+      const { error: messageError } = await supabase
+        .from('messages')
+        .insert({
+          conversation_id: newConversation.id,
+          sender_id: user.id,
+          content: `Hello! I am ${helperName}, the one who will do your errand. Let's discuss the details!`
+        });
+
+      if (messageError) throw messageError;
+
+      setAcceptedErrands([...acceptedErrands, errand.id]);
+      
+      toast({
+        title: "Errand Accepted!",
+        description: `Starting chat for: ${errand.title}`,
+      });
+
+      // Navigate to chat
+      navigate(`/chat/${newConversation.id}`);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
 
   const getTimeAgo = (timestamp: string) => {
@@ -184,10 +256,15 @@ const Errands = () => {
                   <Button 
                     size="sm" 
                     className="bg-accent hover:bg-accent-light"
-                    onClick={() => handleAcceptErrand(errand.id, errand.title)}
-                    disabled={acceptedErrands.includes(errand.id)}
+                    onClick={() => handleAcceptErrand(errand)}
+                    disabled={acceptedErrands.includes(errand.id) || errand.user_id === user?.id}
                   >
-                    {acceptedErrands.includes(errand.id) ? "Accepted ✓" : "Accept Errand"}
+                    {errand.user_id === user?.id 
+                      ? "Your Errand" 
+                      : acceptedErrands.includes(errand.id) 
+                        ? "Accepted ✓" 
+                        : "Accept Errand"
+                    }
                   </Button>
                 </div>
               </div>
