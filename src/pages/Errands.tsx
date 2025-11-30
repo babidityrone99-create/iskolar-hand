@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Search, MapPin, Clock, User, LogOut, UserCircle } from "lucide-react";
+import ErrandStatusBadge from "@/components/ErrandStatusBadge";
+import ErrandStatusControl from "@/components/ErrandStatusControl";
 
 const Errands = () => {
   const navigate = useNavigate();
@@ -15,6 +17,7 @@ const Errands = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [acceptedErrands, setAcceptedErrands] = useState<string[]>([]);
   const [errands, setErrands] = useState<any[]>([]);
+  const [statusFilter, setStatusFilter] = useState<string>("all");
 
   useEffect(() => {
     // Check authentication
@@ -66,6 +69,20 @@ const Errands = () => {
     }
   }, [user, toast]);
 
+  const refetchErrands = async () => {
+    const { data, error } = await supabase
+      .from('errands')
+      .select(`
+        *,
+        profiles (display_name)
+      `)
+      .order('created_at', { ascending: false });
+
+    if (!error && data) {
+      setErrands(data);
+    }
+  };
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     toast({
@@ -111,6 +128,17 @@ const Errands = () => {
         navigate(`/chat/${existingConversation.id}`);
         return;
       }
+
+      // Update errand with accepted_by
+      const { error: updateError } = await supabase
+        .from('errands')
+        .update({ 
+          accepted_by: user.id,
+          status: 'in_progress'
+        })
+        .eq('id', errand.id);
+
+      if (updateError) throw updateError;
 
       // Create new conversation
       const { data: newConversation, error: conversationError } = await supabase
@@ -169,6 +197,12 @@ const Errands = () => {
     return 'Just now';
   };
 
+  const filteredErrands = errands.filter(errand => {
+    if (statusFilter !== 'all' && errand.status !== statusFilter) return false;
+    if (searchQuery && !errand.title.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    return true;
+  });
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -215,19 +249,32 @@ const Errands = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <Button
-            onClick={() => navigate("/post-errand")}
-            className="bg-primary hover:bg-primary-light"
-          >
-            <Plus className="h-5 w-5 mr-2" />
-            Post Errand
-          </Button>
+          <div className="flex gap-2">
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="px-4 py-2 border border-border rounded-md bg-background"
+            >
+              <option value="all">All Status</option>
+              <option value="available">Available</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+            <Button
+              onClick={() => navigate("/post-errand")}
+              className="bg-primary hover:bg-primary-light"
+            >
+              <Plus className="h-5 w-5 mr-2" />
+              Post Errand
+            </Button>
+          </div>
         </div>
 
         {/* Errands Feed */}
         <div className="space-y-4">
           <h2 className="text-2xl font-bold mb-4">Available Errands</h2>
-          {errands.map((errand) => (
+          {filteredErrands.map((errand) => (
             <Card key={errand.id} className="p-6 hover:shadow-lg transition-all cursor-pointer">
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                 <div className="flex-1">
@@ -236,7 +283,16 @@ const Errands = () => {
                       <User className="h-5 w-5 text-muted-foreground" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-semibold text-lg mb-1">{errand.title}</h3>
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <h3 className="font-semibold text-lg">{errand.title}</h3>
+                        <ErrandStatusControl
+                          errandId={errand.id}
+                          currentStatus={errand.status}
+                          isOwner={errand.user_id === user?.id}
+                          isHelper={errand.accepted_by === user?.id}
+                          onStatusUpdate={refetchErrands}
+                        />
+                      </div>
                       <p className="text-sm text-muted-foreground mb-2">
                         Posted by {errand.profiles?.display_name || 'Anonymous'} • {getTimeAgo(errand.created_at)}
                       </p>
@@ -249,6 +305,7 @@ const Errands = () => {
                       {errand.location}
                     </Badge>
                     <Badge variant="outline">{errand.category}</Badge>
+                    <ErrandStatusBadge status={errand.status} />
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-2 md:text-right">
@@ -257,13 +314,19 @@ const Errands = () => {
                     size="sm" 
                     className="bg-accent hover:bg-accent-light"
                     onClick={() => handleAcceptErrand(errand)}
-                    disabled={acceptedErrands.includes(errand.id) || errand.user_id === user?.id}
+                    disabled={
+                      acceptedErrands.includes(errand.id) || 
+                      errand.user_id === user?.id ||
+                      errand.status !== 'available'
+                    }
                   >
                     {errand.user_id === user?.id 
                       ? "Your Errand" 
-                      : acceptedErrands.includes(errand.id) 
-                        ? "Accepted ✓" 
-                        : "Accept Errand"
+                      : errand.status !== 'available'
+                        ? "Not Available"
+                        : acceptedErrands.includes(errand.id) 
+                          ? "Accepted ✓" 
+                          : "Accept Errand"
                     }
                   </Button>
                 </div>
@@ -272,7 +335,7 @@ const Errands = () => {
           ))}
         </div>
 
-        {errands.length === 0 && (
+        {filteredErrands.length === 0 && (
           <Card className="p-12 text-center">
             <p className="text-muted-foreground mb-4">No errands available at the moment</p>
             <Button onClick={() => navigate("/post-errand")} className="bg-primary hover:bg-primary-light">
