@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Search, MapPin, Clock, User, LogOut, UserCircle } from "lucide-react";
+import { Plus, Search, MapPin, Clock, User, LogOut, UserCircle, MessageCircle } from "lucide-react";
 import ErrandStatusBadge from "@/components/ErrandStatusBadge";
 import ErrandStatusControl from "@/components/ErrandStatusControl";
 
@@ -18,6 +18,7 @@ const Errands = () => {
   const [acceptedErrands, setAcceptedErrands] = useState<string[]>([]);
   const [errands, setErrands] = useState<any[]>([]);
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [conversations, setConversations] = useState<Record<string, string>>({});
 
   useEffect(() => {
     // Check authentication
@@ -64,8 +65,26 @@ const Errands = () => {
       }
     };
 
+    const fetchConversations = async () => {
+      if (!user) return;
+      
+      const { data, error } = await supabase
+        .from('conversations')
+        .select('id, errand_id')
+        .or(`poster_id.eq.${user.id},helper_id.eq.${user.id}`);
+
+      if (!error && data) {
+        const convMap: Record<string, string> = {};
+        data.forEach(conv => {
+          convMap[conv.errand_id] = conv.id;
+        });
+        setConversations(convMap);
+      }
+    };
+
     if (user) {
       fetchErrands();
+      fetchConversations();
     }
   }, [user, toast]);
 
@@ -80,6 +99,22 @@ const Errands = () => {
 
     if (!error && data) {
       setErrands(data);
+    }
+
+    // Also refetch conversations
+    if (user) {
+      const { data: convData } = await supabase
+        .from('conversations')
+        .select('id, errand_id')
+        .or(`poster_id.eq.${user.id},helper_id.eq.${user.id}`);
+
+      if (convData) {
+        const convMap: Record<string, string> = {};
+        convData.forEach(conv => {
+          convMap[conv.errand_id] = conv.id;
+        });
+        setConversations(convMap);
+      }
     }
   };
 
@@ -310,25 +345,40 @@ const Errands = () => {
                 </div>
                 <div className="flex flex-col items-end gap-2 md:text-right">
                   <div className="text-2xl font-bold text-primary">₱{errand.budget}</div>
-                  <Button 
-                    size="sm" 
-                    className="bg-accent hover:bg-accent-light"
-                    onClick={() => handleAcceptErrand(errand)}
-                    disabled={
-                      acceptedErrands.includes(errand.id) || 
-                      errand.user_id === user?.id ||
-                      errand.status !== 'available'
-                    }
-                  >
-                    {errand.user_id === user?.id 
-                      ? "Your Errand" 
-                      : errand.status !== 'available'
-                        ? "Not Available"
-                        : acceptedErrands.includes(errand.id) 
-                          ? "Accepted ✓" 
-                          : "Accept Errand"
-                    }
-                  </Button>
+                  <div className="flex gap-2">
+                    {conversations[errand.id] && (
+                      (errand.user_id === user?.id || errand.accepted_by === user?.id) && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => navigate(`/chat/${conversations[errand.id]}`)}
+                          className="gap-2"
+                        >
+                          <MessageCircle className="h-4 w-4" />
+                          Chat
+                        </Button>
+                      )
+                    )}
+                    <Button 
+                      size="sm" 
+                      className="bg-accent hover:bg-accent-light"
+                      onClick={() => handleAcceptErrand(errand)}
+                      disabled={
+                        acceptedErrands.includes(errand.id) || 
+                        errand.user_id === user?.id ||
+                        errand.status !== 'available'
+                      }
+                    >
+                      {errand.user_id === user?.id 
+                        ? "Your Errand" 
+                        : errand.status !== 'available'
+                          ? "Not Available"
+                          : acceptedErrands.includes(errand.id) 
+                            ? "Accepted ✓" 
+                            : "Accept Errand"
+                      }
+                    </Button>
+                  </div>
                 </div>
               </div>
             </Card>
