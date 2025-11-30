@@ -65,42 +65,52 @@ export type Database = {
       }
       errands: {
         Row: {
+          accepted_by: string | null
           budget: number
           category: string
           created_at: string
           description: string
           id: string
           location: string
-          status: string
+          status: Database["public"]["Enums"]["errand_status"]
           title: string
           updated_at: string
           user_id: string
         }
         Insert: {
+          accepted_by?: string | null
           budget: number
           category: string
           created_at?: string
           description: string
           id?: string
           location: string
-          status?: string
+          status?: Database["public"]["Enums"]["errand_status"]
           title: string
           updated_at?: string
           user_id: string
         }
         Update: {
+          accepted_by?: string | null
           budget?: number
           category?: string
           created_at?: string
           description?: string
           id?: string
           location?: string
-          status?: string
+          status?: Database["public"]["Enums"]["errand_status"]
           title?: string
           updated_at?: string
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "errands_accepted_by_fkey"
+            columns: ["accepted_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
           {
             foreignKeyName: "errands_user_id_fkey"
             columns: ["user_id"]
@@ -181,7 +191,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      errand_status: "available" | "in_progress" | "completed" | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -308,6 +318,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      errand_status: ["available", "in_progress", "completed", "cancelled"],
+    },
   },
 } as const
