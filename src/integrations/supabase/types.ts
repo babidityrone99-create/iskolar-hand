@@ -183,6 +183,74 @@ export type Database = {
         }
         Relationships: []
       }
+      reports: {
+        Row: {
+          conversation_id: string
+          created_at: string
+          description: string | null
+          errand_id: string
+          id: string
+          reason: string
+          reported_user_id: string
+          reporter_id: string
+          status: Database["public"]["Enums"]["report_status"]
+          updated_at: string
+        }
+        Insert: {
+          conversation_id: string
+          created_at?: string
+          description?: string | null
+          errand_id: string
+          id?: string
+          reason: string
+          reported_user_id: string
+          reporter_id: string
+          status?: Database["public"]["Enums"]["report_status"]
+          updated_at?: string
+        }
+        Update: {
+          conversation_id?: string
+          created_at?: string
+          description?: string | null
+          errand_id?: string
+          id?: string
+          reason?: string
+          reported_user_id?: string
+          reporter_id?: string
+          status?: Database["public"]["Enums"]["report_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reports_errand_id_fkey"
+            columns: ["errand_id"]
+            isOneToOne: false
+            referencedRelation: "errands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reports_reported_user_id_fkey"
+            columns: ["reported_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "reports_reporter_id_fkey"
+            columns: ["reporter_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -192,6 +260,7 @@ export type Database = {
     }
     Enums: {
       errand_status: "available" | "in_progress" | "completed" | "cancelled"
+      report_status: "pending" | "reviewing" | "resolved" | "dismissed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -320,6 +389,7 @@ export const Constants = {
   public: {
     Enums: {
       errand_status: ["available", "in_progress", "completed", "cancelled"],
+      report_status: ["pending", "reviewing", "resolved", "dismissed"],
     },
   },
 } as const
