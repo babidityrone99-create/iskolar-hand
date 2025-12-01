@@ -50,7 +50,7 @@ const Errands = () => {
         .from('errands')
         .select(`
           *,
-          profiles (display_name)
+          profiles!errands_user_id_fkey (display_name)
         `)
         .order('created_at', { ascending: false });
 
@@ -93,7 +93,7 @@ const Errands = () => {
       .from('errands')
       .select(`
         *,
-        profiles (display_name)
+        profiles!errands_user_id_fkey (display_name)
       `)
       .order('created_at', { ascending: false });
 
