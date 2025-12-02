@@ -106,7 +106,7 @@ const Auth = () => {
   return (
     <div className="min-h-screen bg-secondary flex flex-col">
       {/* Maroon Hero Header */}
-      <div className="relative px-6 py-8 text-center text-white" style={{ backgroundColor: '#770000' }}>
+      <div className="relative px-6 py-8 text-center text-white" style={{ backgroundColor: '#550000' }}>
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold-dark via-gold to-gold-light" />
         <Button
           variant="ghost"
