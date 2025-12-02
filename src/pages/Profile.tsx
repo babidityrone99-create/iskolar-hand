@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Star, CheckCircle, Award, Camera } from "lucide-react";
+import { ArrowLeft, Star, CheckCircle, Award, Camera, Info } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { BottomNav } from "@/components/BottomNav";
 import logo from "@/assets/iskxhand-logo.png";
@@ -104,11 +104,20 @@ const Profile = () => {
       {/* Header */}
       <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-3">
-            <img src={logo} alt="ISKXHand Logo" className="h-12 w-12 rounded-xl" />
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              ISKXHand
-            </h1>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <img src={logo} alt="ISKXHand Logo" className="h-12 w-12 rounded-xl" />
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                ISKXHand
+              </h1>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("/about")}
+            >
+              <Info className="h-5 w-5" />
+            </Button>
           </div>
         </div>
       </header>

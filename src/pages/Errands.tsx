@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Search, MapPin, Clock, User, LogOut, UserCircle, MessageCircle } from "lucide-react";
+import { Plus, Search, MapPin, Clock, User, LogOut, UserCircle, MessageCircle, Info } from "lucide-react";
 import ErrandStatusBadge from "@/components/ErrandStatusBadge";
 import ErrandStatusControl from "@/components/ErrandStatusControl";
 import { BottomNav } from "@/components/BottomNav";
@@ -253,6 +253,13 @@ const Errands = () => {
               </h1>
             </div>
             <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate("/about")}
+              >
+                <Info className="h-5 w-5" />
+              </Button>
               <Button
                 variant="ghost"
                 size="icon"
