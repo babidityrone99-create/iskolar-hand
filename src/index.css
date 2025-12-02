@@ -43,6 +43,9 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
 
+    /* Nav icon gold */
+    --nav-icon: 45 77% 66%;
+
     /* Gradients */
     --gradient-hero: linear-gradient(135deg, hsl(0 60% 25%), hsl(140 50% 35%));
     --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(30 15% 98%));
