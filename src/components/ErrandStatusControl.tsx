@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -5,6 +6,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { MoreVertical, Clock, CheckCircle, XCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -25,6 +36,7 @@ const ErrandStatusControl = ({
   onStatusUpdate 
 }: ErrandStatusControlProps) => {
   const { toast } = useToast();
+  const [showCompleteDialog, setShowCompleteDialog] = useState(false);
 
   const updateStatus = async (newStatus: 'available' | 'in_progress' | 'completed' | 'cancelled') => {
     try {
@@ -89,41 +101,60 @@ const ErrandStatusControl = ({
   }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <MoreVertical className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        {currentStatus === 'available' && isHelper && (
-          <DropdownMenuItem onClick={() => updateStatus('in_progress')}>
-            <Clock className="h-4 w-4 mr-2" />
-            Mark In Progress
-          </DropdownMenuItem>
-        )}
-        {currentStatus === 'in_progress' && (
-          <>
-            <DropdownMenuItem onClick={() => updateStatus('completed')}>
-              <CheckCircle className="h-4 w-4 mr-2" />
-              Mark Completed
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon">
+            <MoreVertical className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          {currentStatus === 'available' && isHelper && (
+            <DropdownMenuItem onClick={() => updateStatus('in_progress')}>
+              <Clock className="h-4 w-4 mr-2" />
+              Mark In Progress
             </DropdownMenuItem>
-            {isOwner && (
-              <DropdownMenuItem onClick={() => updateStatus('cancelled')}>
-                <XCircle className="h-4 w-4 mr-2" />
-                Cancel Errand
+          )}
+          {currentStatus === 'in_progress' && (
+            <>
+              <DropdownMenuItem onClick={() => setShowCompleteDialog(true)}>
+                <CheckCircle className="h-4 w-4 mr-2" />
+                Mark Completed
               </DropdownMenuItem>
-            )}
-          </>
-        )}
-        {currentStatus === 'available' && isOwner && (
-          <DropdownMenuItem onClick={() => updateStatus('cancelled')}>
-            <XCircle className="h-4 w-4 mr-2" />
-            Cancel Errand
-          </DropdownMenuItem>
-        )}
-      </DropdownMenuContent>
-    </DropdownMenu>
+              {isOwner && (
+                <DropdownMenuItem onClick={() => updateStatus('cancelled')}>
+                  <XCircle className="h-4 w-4 mr-2" />
+                  Cancel Errand
+                </DropdownMenuItem>
+              )}
+            </>
+          )}
+          {currentStatus === 'available' && isOwner && (
+            <DropdownMenuItem onClick={() => updateStatus('cancelled')}>
+              <XCircle className="h-4 w-4 mr-2" />
+              Cancel Errand
+            </DropdownMenuItem>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <AlertDialog open={showCompleteDialog} onOpenChange={setShowCompleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Complete this errand?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action will mark the errand as completed and credit the payment to the helper's balance. This cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={() => updateStatus('completed')}>
+              Confirm Completion
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 };
 
