@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { BottomNav } from "@/components/BottomNav";
 
 const Chat = () => {
   const navigate = useNavigate();
@@ -216,7 +217,7 @@ const Chat = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col pb-20">
       {/* Header */}
       <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
@@ -357,6 +358,8 @@ const Chat = () => {
           </form>
         </div>
       </div>
+
+      <BottomNav />
     </div>
   );
 };

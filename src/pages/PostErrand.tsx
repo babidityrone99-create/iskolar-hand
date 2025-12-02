@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft } from "lucide-react";
+import { BottomNav } from "@/components/BottomNav";
 import logo from "@/assets/iskxhand-logo.png";
 
 const PostErrand = () => {
@@ -92,7 +93,7 @@ const PostErrand = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20">
       {/* Header */}
       <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
@@ -192,6 +193,8 @@ const PostErrand = () => {
           </form>
         </Card>
       </main>
+
+      <BottomNav />
     </div>
   );
 };

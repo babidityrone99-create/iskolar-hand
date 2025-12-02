@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Star, CheckCircle, Award, Camera } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { BottomNav } from "@/components/BottomNav";
 import logo from "@/assets/iskxhand-logo.png";
 
 const Profile = () => {
@@ -97,7 +98,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20">
       {/* Header */}
       <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
@@ -245,6 +246,8 @@ const Profile = () => {
           </div>
         </Card>
       </main>
+
+      <BottomNav />
     </div>
   );
 };
