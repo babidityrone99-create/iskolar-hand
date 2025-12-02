@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft } from "lucide-react";
+import logo from "@/assets/iskxhand-logo.png";
 
 const PostErrand = () => {
   const navigate = useNavigate();
@@ -95,10 +96,8 @@ const PostErrand = () => {
       {/* Header */}
       <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-2">
-            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">IX</span>
-            </div>
+          <div className="flex items-center gap-3">
+            <img src={logo} alt="ISKXHand Logo" className="h-12 w-12 rounded-xl" />
             <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               ISKXHand
             </h1>
