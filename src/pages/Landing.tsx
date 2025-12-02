@@ -53,9 +53,9 @@ const Landing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[hsl(0,63%,31%)] via-[hsl(0,63%,31%)] to-[hsl(0,63%,25%)]">
+    <div className="min-h-screen bg-gradient-to-b from-[#550000] via-[#550000] to-[#440000]">
       {/* Header */}
-      <header className="border-b border-white/20 bg-[hsl(0,63%,31%)]/80 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b border-white/20 bg-[#550000]/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="h-10 w-10 rounded-full bg-white/20 flex items-center justify-center">
@@ -65,7 +65,7 @@ const Landing = () => {
               ISKXHand
             </h1>
           </div>
-          <Button onClick={() => navigate("/auth")} className="bg-white text-[hsl(0,63%,31%)] hover:bg-white/90">
+          <Button onClick={() => navigate("/auth")} className="bg-white text-[#550000] hover:bg-white/90">
             Get Started
           </Button>
         </div>
@@ -92,7 +92,7 @@ const Landing = () => {
             <Button 
               onClick={() => navigate("/auth")} 
               size="lg"
-              className="bg-white text-[hsl(0,63%,31%)] hover:bg-white/90 shadow-lg"
+              className="bg-white text-[#550000] hover:bg-white/90 shadow-lg"
             >
               Start Helping Today
             </Button>
@@ -143,7 +143,7 @@ const Landing = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
           {howItWorks.map((item, index) => (
             <div key={index} className="text-center relative">
-              <div className="h-16 w-16 rounded-full bg-white text-[hsl(0,63%,31%)] flex items-center justify-center mx-auto mb-4 text-2xl font-bold shadow-lg">
+              <div className="h-16 w-16 rounded-full bg-white text-[#550000] flex items-center justify-center mx-auto mb-4 text-2xl font-bold shadow-lg">
                 {item.step}
               </div>
               <h4 className="font-semibold text-lg mb-2 text-white">{item.title}</h4>
@@ -168,7 +168,7 @@ const Landing = () => {
           <Button 
             onClick={() => navigate("/auth")}
             size="lg"
-            className="bg-white text-[hsl(0,63%,31%)] hover:bg-white/90 shadow-lg"
+            className="bg-white text-[#550000] hover:bg-white/90 shadow-lg"
           >
             Create Your Account
           </Button>
@@ -176,7 +176,7 @@ const Landing = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/20 bg-[hsl(0,63%,25%)] py-8">
+      <footer className="border-t border-white/20 bg-[#440000] py-8">
         <div className="container mx-auto px-4 text-center text-white/70">
           <p className="mb-2">© 2025 ISKXHand. Made for UPLB iskolar.</p>
           <p className="text-sm">A helping hand platform for the UP Los Baños community</p>
