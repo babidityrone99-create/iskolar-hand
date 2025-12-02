@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import Messages from "./pages/Messages";
 import Install from "./pages/Install";
 import Chat from "./pages/Chat";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/profile" element={<Profile />} />
           <Route path="/chat/:conversationId" element={<Chat />} />
           <Route path="/install" element={<Install />} />
+          <Route path="/about" element={<About />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, Info } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
 import logo from "@/assets/iskxhand-logo.png";
 
@@ -96,6 +97,14 @@ const Messages = () => {
             <img src={logo} alt="ISKXHand" className="h-8 w-8" />
             <h1 className="text-xl font-bold">Messages</h1>
           </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/about")}
+            className="text-primary-foreground hover:bg-primary-foreground/20"
+          >
+            <Info className="h-5 w-5" />
+          </Button>
         </div>
       </header>
 

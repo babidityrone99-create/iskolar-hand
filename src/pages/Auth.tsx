@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Info } from "lucide-react";
 import logo from "@/assets/iskxhand-logo.png";
 
 const Auth = () => {
@@ -105,6 +105,14 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted flex items-center justify-center p-4">
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => navigate("/about")}
+        className="absolute top-4 right-4"
+      >
+        <Info className="h-5 w-5" />
+      </Button>
       <Card className="w-full max-w-md p-8 shadow-xl">
         <Button
           variant="ghost"

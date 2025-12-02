@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ListTodo, MessageSquare, PlusCircle, TrendingUp } from "lucide-react";
+import { ListTodo, MessageSquare, PlusCircle, TrendingUp, Info } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
 import logo from "@/assets/iskxhand-logo.png";
 
@@ -56,7 +56,14 @@ const Home = () => {
             <img src={logo} alt="ISKXHand" className="h-8 w-8" />
             <h1 className="text-xl font-bold">ISKXHand</h1>
           </div>
-          <p className="text-sm">Your helping hand</p>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/about")}
+            className="text-primary-foreground hover:bg-primary-foreground/20"
+          >
+            <Info className="h-5 w-5" />
+          </Button>
         </div>
       </header>
 

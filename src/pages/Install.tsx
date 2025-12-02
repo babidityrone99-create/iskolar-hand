@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Download, Check } from "lucide-react";
+import { Download, Check, Info } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import logo from "@/assets/iskxhand-logo.png";
 
@@ -42,6 +42,14 @@ const Install = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted flex items-center justify-center p-4">
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => navigate("/about")}
+        className="absolute top-4 right-4"
+      >
+        <Info className="h-5 w-5" />
+      </Button>
       <Card className="max-w-md w-full p-8 text-center space-y-6">
         <div className="flex justify-center">
           <img src={logo} alt="ISKXHand Logo" className="w-24 h-24 rounded-3xl" />

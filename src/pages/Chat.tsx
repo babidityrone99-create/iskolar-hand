@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Send, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Send, AlertTriangle, Info } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -240,6 +240,14 @@ const Chat = () => {
                 }
               </p>
             </div>
+            
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("/about")}
+            >
+              <Info className="h-5 w-5" />
+            </Button>
             
             <AlertDialog open={showReportDialog} onOpenChange={setShowReportDialog}>
               <AlertDialogTrigger asChild>

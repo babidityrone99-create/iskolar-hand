@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { CheckCircle, Shield, Star, Users, Clock, Verified, Smartphone } from "lucide-react";
+import { CheckCircle, Shield, Star, Users, Clock, Verified, Smartphone, Info } from "lucide-react";
 import logo from "@/assets/iskxhand-logo.png";
 
 const Landing = () => {
@@ -64,9 +64,19 @@ const Landing = () => {
               ISKXHand
             </h1>
           </div>
-          <Button onClick={() => navigate("/auth")} className="bg-white text-[#550000] hover:bg-white/90">
-            Get Started
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => navigate("/about")}
+              className="text-white hover:bg-white/20"
+            >
+              <Info className="h-5 w-5" />
+            </Button>
+            <Button onClick={() => navigate("/auth")} className="bg-white text-[#550000] hover:bg-white/90">
+              Get Started
+            </Button>
+          </div>
         </div>
       </header>
 
