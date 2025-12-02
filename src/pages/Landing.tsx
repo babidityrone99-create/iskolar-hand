@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { CheckCircle, Shield, Star, Users, Clock, Verified, Smartphone } from "lucide-react";
+import logo from "@/assets/iskxhand-logo.png";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -57,10 +58,8 @@ const Landing = () => {
       {/* Header */}
       <header className="border-b border-white/20 bg-[#550000]/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="h-10 w-10 rounded-full bg-white/20 flex items-center justify-center">
-              <span className="text-white font-bold text-lg">IX</span>
-            </div>
+          <div className="flex items-center gap-3">
+            <img src={logo} alt="ISKXHand Logo" className="h-12 w-12 rounded-xl" />
             <h1 className="text-2xl font-bold text-white">
               ISKXHand
             </h1>
