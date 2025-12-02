@@ -9,6 +9,7 @@ import logo from "@/assets/iskxhand-logo.png";
 
 const Home = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
   const [stats, setStats] = useState({
     totalErrands: 0,
     activeErrands: 0,
@@ -23,6 +24,8 @@ const Home = () => {
         navigate("/auth");
         return;
       }
+
+      setUser(session.user);
 
       // Fetch user stats
       const userId = session.user.id;
@@ -58,6 +61,14 @@ const Home = () => {
       </header>
 
       <main className="p-4 max-w-lg mx-auto space-y-6">
+        {/* Greeting Section */}
+        <div className="rounded-lg p-6 text-white" style={{ backgroundColor: '#550000' }}>
+          <h2 className="text-2xl font-bold">
+            Kumusta ka {user?.user_metadata?.full_name?.split(' ')[0] || 'user'}?
+          </h2>
+          <p className="text-sm opacity-90 mt-1">Welcome back to ISKXHand</p>
+        </div>
+
         <div className="grid grid-cols-2 gap-4">
           <Card>
             <CardHeader className="pb-3">
