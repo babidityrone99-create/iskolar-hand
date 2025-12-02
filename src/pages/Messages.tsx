@@ -91,7 +91,7 @@ const Messages = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <header className="bg-primary text-primary-foreground p-4 shadow-md">
+      <header className="p-4 shadow-md text-white" style={{ backgroundColor: '#550000' }}>
         <div className="flex items-center justify-between max-w-lg mx-auto">
           <div className="flex items-center gap-2">
             <img src={logo} alt="ISKXHand" className="h-8 w-8" />
@@ -101,7 +101,7 @@ const Messages = () => {
             variant="ghost"
             size="icon"
             onClick={() => navigate("/about")}
-            className="text-primary-foreground hover:bg-primary-foreground/20"
+            className="text-white hover:bg-white/20"
           >
             <Info className="h-5 w-5" />
           </Button>

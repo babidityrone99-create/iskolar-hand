@@ -219,21 +219,22 @@ const Chat = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col pb-20">
       {/* Header */}
-      <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
+      <header className="sticky top-0 z-50 text-white" style={{ backgroundColor: '#550000' }}>
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => navigate("/errands")}
+              className="text-white hover:bg-white/20"
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="flex-1">
-              <h1 className="text-xl font-bold">
+              <h1 className="text-xl font-bold text-white">
                 {conversation?.errands?.title || "Chat"}
               </h1>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-white/70">
                 {currentUserId === conversation?.poster_id 
                   ? `With ${conversation?.helper?.display_name || 'Helper'}`
                   : `With ${conversation?.poster?.display_name || 'Poster'}`
@@ -245,6 +246,7 @@ const Chat = () => {
               variant="ghost"
               size="icon"
               onClick={() => navigate("/about")}
+              className="text-white hover:bg-white/20"
             >
               <Info className="h-5 w-5" />
             </Button>
