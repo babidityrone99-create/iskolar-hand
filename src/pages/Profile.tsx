@@ -177,7 +177,7 @@ const Profile = () => {
           </div>
         </Card>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-3 gap-6">
           <Card className="p-6">
             <h3 className="text-xl font-semibold mb-4">Activity Stats</h3>
             <div className="space-y-4">
@@ -188,6 +188,16 @@ const Profile = () => {
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground">Posted Errands</span>
                 <span className="text-2xl font-bold text-accent">5</span>
+              </div>
+            </div>
+          </Card>
+
+          <Card className="p-6">
+            <h3 className="text-xl font-semibold mb-4">My Balance</h3>
+            <div className="space-y-4">
+              <div className="flex flex-col items-center justify-center py-2">
+                <span className="text-4xl font-bold text-primary">₱1,250.00</span>
+                <span className="text-sm text-muted-foreground mt-1">Philippine Peso</span>
               </div>
             </div>
           </Card>
