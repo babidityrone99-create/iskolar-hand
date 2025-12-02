@@ -16,6 +16,7 @@ const Profile = () => {
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
   const [uploading, setUploading] = useState(false);
+  const [balance, setBalance] = useState<number>(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ const Profile = () => {
       } else {
         setUser(session.user);
         
-        // Fetch profile data including avatar
+        // Fetch profile data including avatar and balance
         const { data: profileData } = await supabase
           .from('profiles')
           .select('*')
@@ -34,6 +35,7 @@ const Profile = () => {
           .single();
         
         setProfile(profileData);
+        setBalance(profileData?.balance || 0);
       }
     };
     getUser();
@@ -196,7 +198,9 @@ const Profile = () => {
             <h3 className="text-xl font-semibold mb-4">My Balance</h3>
             <div className="space-y-4">
               <div className="flex flex-col items-center justify-center py-2">
-                <span className="text-4xl font-bold text-primary">₱1,250.00</span>
+                <span className="text-4xl font-bold text-primary">
+                  ₱{balance.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </span>
                 <span className="text-sm text-muted-foreground mt-1">Philippine Peso</span>
               </div>
             </div>
