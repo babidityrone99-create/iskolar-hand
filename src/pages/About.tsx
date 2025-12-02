@@ -30,7 +30,7 @@ const About = () => {
         </Button>
       </div>
 
-      <Card className="w-full max-w-2xl bg-white/75 backdrop-blur-sm">
+      <Card className="w-full max-w-2xl bg-white/45 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-3xl text-center">About ISKXHand</CardTitle>
         </CardHeader>
