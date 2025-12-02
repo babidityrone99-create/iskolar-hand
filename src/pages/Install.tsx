@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Smartphone, Download, Check } from "lucide-react";
+import { Download, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import logo from "@/assets/iskxhand-logo.png";
 
 const Install = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -43,9 +44,7 @@ const Install = () => {
     <div className="min-h-screen bg-gradient-to-b from-background to-muted flex items-center justify-center p-4">
       <Card className="max-w-md w-full p-8 text-center space-y-6">
         <div className="flex justify-center">
-          <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
-            <Smartphone className="w-12 h-12 text-primary" />
-          </div>
+          <img src={logo} alt="ISKXHand Logo" className="w-24 h-24 rounded-3xl" />
         </div>
 
         <div className="space-y-2">

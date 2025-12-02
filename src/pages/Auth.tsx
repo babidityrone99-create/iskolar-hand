@@ -7,7 +7,8 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Verified, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import logo from "@/assets/iskxhand-logo.png";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -116,8 +117,8 @@ const Auth = () => {
         </Button>
 
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-br from-primary to-accent mb-4">
-            <Verified className="h-8 w-8 text-primary-foreground" />
+          <div className="inline-flex items-center justify-center mb-4">
+            <img src={logo} alt="ISKXHand Logo" className="h-20 w-20 rounded-2xl" />
           </div>
           <h1 className="text-3xl font-bold mb-2">Welcome to ISKXHand</h1>
           <p className="text-muted-foreground">
