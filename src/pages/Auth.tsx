@@ -105,14 +105,14 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-secondary flex flex-col">
-      {/* Navy Hero Header */}
-      <div className="relative bg-secondary px-6 py-8 text-center">
+      {/* Maroon Hero Header */}
+      <div className="relative px-6 py-8 text-center text-white" style={{ backgroundColor: '#770000' }}>
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold-dark via-gold to-gold-light" />
         <Button
           variant="ghost"
           size="icon"
           onClick={() => navigate("/about")}
-          className="absolute top-4 right-4 text-secondary-foreground hover:bg-secondary-foreground/10"
+          className="absolute top-4 right-4 text-white hover:bg-white/10"
         >
           <Info className="h-5 w-5" />
         </Button>
@@ -120,15 +120,15 @@ const Auth = () => {
           variant="ghost"
           size="sm"
           onClick={() => navigate("/")}
-          className="absolute top-4 left-4 text-secondary-foreground hover:bg-secondary-foreground/10"
+          className="absolute top-4 left-4 text-white hover:bg-white/10"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
         </Button>
         <div className="pt-8">
           <img src={logo} alt="ISKXHand Logo" className="h-20 w-20 rounded-2xl mx-auto mb-4 shadow-lg" />
-          <h1 className="text-2xl font-bold text-secondary-foreground">Welcome to ISKXHand</h1>
-          <p className="text-secondary-foreground/70 text-sm mt-1">
+          <h1 className="text-2xl font-bold text-white">Welcome to ISKXHand</h1>
+          <p className="text-white/70 text-sm mt-1">
             Join the UPLB student community
           </p>
         </div>
