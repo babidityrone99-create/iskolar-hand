@@ -104,127 +104,138 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted flex items-center justify-center p-4">
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => navigate("/about")}
-        className="absolute top-4 right-4"
-      >
-        <Info className="h-5 w-5" />
-      </Button>
-      <Card className="w-full max-w-md p-8 shadow-xl">
+    <div className="min-h-screen bg-secondary flex flex-col">
+      {/* Navy Hero Header */}
+      <div className="relative bg-secondary px-6 py-8 text-center">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold-dark via-gold to-gold-light" />
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => navigate("/about")}
+          className="absolute top-4 right-4 text-secondary-foreground hover:bg-secondary-foreground/10"
+        >
+          <Info className="h-5 w-5" />
+        </Button>
         <Button
           variant="ghost"
           size="sm"
           onClick={() => navigate("/")}
-          className="mb-4"
+          className="absolute top-4 left-4 text-secondary-foreground hover:bg-secondary-foreground/10"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Home
+          Back
         </Button>
-
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center mb-4">
-            <img src={logo} alt="ISKXHand Logo" className="h-20 w-20 rounded-2xl" />
-          </div>
-          <h1 className="text-3xl font-bold mb-2">Welcome to ISKXHand</h1>
-          <p className="text-muted-foreground">
+        <div className="pt-8">
+          <img src={logo} alt="ISKXHand Logo" className="h-20 w-20 rounded-2xl mx-auto mb-4 shadow-lg" />
+          <h1 className="text-2xl font-bold text-secondary-foreground">Welcome to ISKXHand</h1>
+          <p className="text-secondary-foreground/70 text-sm mt-1">
             Join the UPLB student community
           </p>
         </div>
+      </div>
 
-        <Tabs defaultValue="signin" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="signin">Sign In</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
-          </TabsList>
+      {/* Main Content */}
+      <div className="flex-1 bg-background rounded-t-3xl -mt-4 px-6 py-8">
+        <Card className="w-full max-w-md mx-auto p-6 shadow-xl border-gold/20">
+          <Tabs defaultValue="signin" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-6 bg-muted">
+              <TabsTrigger value="signin" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Sign In</TabsTrigger>
+              <TabsTrigger value="signup" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Sign Up</TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="signin">
-            <form onSubmit={handleSignIn} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="signin-email">Email</Label>
-                <Input
-                  id="signin-email"
-                  type="email"
-                  placeholder="your.email@up.edu.ph"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="signin-password">Password</Label>
-                <Input
-                  id="signin-password"
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <Button
-                type="submit"
-                className="w-full bg-primary hover:bg-primary-light"
-                disabled={isLoading}
-              >
-                {isLoading ? "Signing in..." : "Sign In"}
-              </Button>
-            </form>
-          </TabsContent>
+            <TabsContent value="signin">
+              <form onSubmit={handleSignIn} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="signin-email">Email</Label>
+                  <Input
+                    id="signin-email"
+                    type="email"
+                    placeholder="your.email@up.edu.ph"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="border-border focus:border-gold focus:ring-gold"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="signin-password">Password</Label>
+                  <Input
+                    id="signin-password"
+                    type="password"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="border-border focus:border-gold focus:ring-gold"
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  variant="gold"
+                  className="w-full"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Signing in..." : "Sign In"}
+                </Button>
+              </form>
+            </TabsContent>
 
-          <TabsContent value="signup">
-            <form onSubmit={handleSignUp} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="signup-name">Full Name</Label>
-                <Input
-                  id="signup-name"
-                  type="text"
-                  placeholder="Juan Dela Cruz"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="signup-email">Student Email</Label>
-                <Input
-                  id="signup-email"
-                  type="email"
-                  placeholder="your.email@up.edu.ph"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="signup-password">Password</Label>
-                <Input
-                  id="signup-password"
-                  type="password"
-                  placeholder="Create a strong password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  minLength={6}
-                />
-              </div>
-              <Button
-                type="submit"
-                className="w-full bg-primary hover:bg-primary-light"
-                disabled={isLoading}
-              >
-                {isLoading ? "Creating account..." : "Sign Up"}
-              </Button>
-            </form>
-          </TabsContent>
-        </Tabs>
+            <TabsContent value="signup">
+              <form onSubmit={handleSignUp} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="signup-name">Full Name</Label>
+                  <Input
+                    id="signup-name"
+                    type="text"
+                    placeholder="Juan Dela Cruz"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    required
+                    className="border-border focus:border-gold focus:ring-gold"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="signup-email">Student Email</Label>
+                  <Input
+                    id="signup-email"
+                    type="email"
+                    placeholder="your.email@up.edu.ph"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="border-border focus:border-gold focus:ring-gold"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="signup-password">Password</Label>
+                  <Input
+                    id="signup-password"
+                    type="password"
+                    placeholder="Create a strong password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={6}
+                    className="border-border focus:border-gold focus:ring-gold"
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  variant="gold"
+                  className="w-full"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Creating account..." : "Sign Up"}
+                </Button>
+              </form>
+            </TabsContent>
+          </Tabs>
 
-        <p className="text-center text-sm text-muted-foreground mt-6">
-          By continuing, you agree to our Terms of Service and Privacy Policy
-        </p>
-      </Card>
+          <p className="text-center text-xs text-muted-foreground mt-6">
+            By continuing, you agree to our Terms of Service and Privacy Policy
+          </p>
+        </Card>
+      </div>
     </div>
   );
 };
