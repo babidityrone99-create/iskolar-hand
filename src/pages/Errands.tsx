@@ -243,12 +243,12 @@ const Errands = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
-      <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
+      <header className="sticky top-0 z-50 text-white" style={{ backgroundColor: '#550000' }}>
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <img src={logo} alt="ISKXHand Logo" className="h-12 w-12 rounded-xl" />
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold text-white">
                 ISKXHand
               </h1>
             </div>
@@ -257,6 +257,7 @@ const Errands = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => navigate("/about")}
+                className="text-white hover:bg-white/20"
               >
                 <Info className="h-5 w-5" />
               </Button>
@@ -264,6 +265,7 @@ const Errands = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => navigate("/profile")}
+                className="text-white hover:bg-white/20"
               >
                 <UserCircle className="h-5 w-5" />
               </Button>
@@ -271,6 +273,7 @@ const Errands = () => {
                 variant="ghost"
                 size="icon"
                 onClick={handleLogout}
+                className="text-white hover:bg-white/20"
               >
                 <LogOut className="h-5 w-5" />
               </Button>
