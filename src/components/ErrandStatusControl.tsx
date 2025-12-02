@@ -28,6 +28,32 @@ const ErrandStatusControl = ({
 
   const updateStatus = async (newStatus: 'available' | 'in_progress' | 'completed' | 'cancelled') => {
     try {
+      // If completing, fetch errand details first to create transaction
+      if (newStatus === 'completed') {
+        const { data: errand, error: fetchError } = await supabase
+          .from('errands')
+          .select('budget, accepted_by')
+          .eq('id', errandId)
+          .single();
+
+        if (fetchError) throw fetchError;
+
+        if (errand?.accepted_by && errand?.budget) {
+          // Create earning transaction for the helper
+          const { error: transactionError } = await supabase
+            .from('transactions')
+            .insert({
+              user_id: errand.accepted_by,
+              errand_id: errandId,
+              type: 'earning',
+              amount: errand.budget,
+              description: 'Errand completed - earned payment'
+            });
+
+          if (transactionError) throw transactionError;
+        }
+      }
+
       const { error } = await supabase
         .from('errands')
         .update({ status: newStatus })
@@ -37,7 +63,9 @@ const ErrandStatusControl = ({
 
       toast({
         title: "Status Updated",
-        description: `Errand marked as ${newStatus.replace('_', ' ')}`,
+        description: newStatus === 'completed' 
+          ? "Errand completed! Payment has been credited." 
+          : `Errand marked as ${newStatus.replace('_', ' ')}`,
       });
 
       onStatusUpdate();
