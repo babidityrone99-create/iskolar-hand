@@ -6,10 +6,21 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Search, MapPin, Clock, User, LogOut, UserCircle, MessageCircle, Info } from "lucide-react";
+import { Plus, Search, MapPin, Clock, User, LogOut, UserCircle, MessageCircle, Info, Trash2 } from "lucide-react";
 import ErrandStatusBadge from "@/components/ErrandStatusBadge";
 import ErrandStatusControl from "@/components/ErrandStatusControl";
 import { BottomNav } from "@/components/BottomNav";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import logo from "@/assets/iskxhand-logo.png";
 
 const Errands = () => {
@@ -117,6 +128,27 @@ const Errands = () => {
         });
         setConversations(convMap);
       }
+    }
+  };
+
+  const handleDeleteErrand = async (errandId: string) => {
+    const { error } = await supabase
+      .from('errands')
+      .delete()
+      .eq('id', errandId);
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete errand",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Deleted",
+        description: "Errand has been deleted successfully",
+      });
+      refetchErrands();
     }
   };
 
@@ -355,7 +387,7 @@ const Errands = () => {
                 </div>
                 <div className="flex flex-col items-end gap-2 md:text-right">
                   <div className="text-2xl font-bold text-primary">₱{errand.budget}</div>
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     {conversations[errand.id] && (
                       (errand.user_id === user?.id || errand.accepted_by === user?.id) && (
                         <Button
@@ -369,25 +401,52 @@ const Errands = () => {
                         </Button>
                       )
                     )}
-                    <Button 
-                      size="sm" 
-                      className="bg-accent hover:bg-accent-light"
-                      onClick={() => handleAcceptErrand(errand)}
-                      disabled={
-                        acceptedErrands.includes(errand.id) || 
-                        errand.user_id === user?.id ||
-                        errand.status !== 'available'
-                      }
-                    >
-                      {errand.user_id === user?.id 
-                        ? "Your Errand" 
-                        : errand.status !== 'available'
+                    {errand.user_id === user?.id && (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button 
+                            size="sm" 
+                            variant="destructive"
+                            className="gap-2"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                            Delete
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Errand</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete "{errand.title}"? This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => handleDeleteErrand(errand.id)}>
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    )}
+                    {errand.user_id !== user?.id && (
+                      <Button 
+                        size="sm" 
+                        className="bg-accent hover:bg-accent-light"
+                        onClick={() => handleAcceptErrand(errand)}
+                        disabled={
+                          acceptedErrands.includes(errand.id) || 
+                          errand.status !== 'available'
+                        }
+                      >
+                        {errand.status !== 'available'
                           ? "Not Available"
                           : acceptedErrands.includes(errand.id) 
                             ? "Accepted ✓" 
                             : "Accept Errand"
-                      }
-                    </Button>
+                        }
+                      </Button>
+                    )}
                   </div>
                 </div>
               </div>
